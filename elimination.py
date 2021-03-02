@@ -1,5 +1,3 @@
-from itertools import count
-
 from position import Position
 import copy
 
@@ -47,7 +45,6 @@ def gauss_jordan(A):
         if pivot != 1:
             U[pivot_index] = [U[pivot_index][column] / pivot for column in range(n)]
             I[pivot_index] = [I[pivot_index][column] / pivot for column in range(n)]
-            pivot = 1
         for row in range(m):
             if row != pivot_index:
                 multiplier = U[row][pivot_index] / U[pivot_index][pivot_index]
@@ -57,14 +54,15 @@ def gauss_jordan(A):
     return I
 
 
-# TODO add factors to D
 def factorize_D(input_U):
     U = copy.deepcopy(list(input_U))
     m = len(U)  # rows
     n = len(U[0])  # columns
     max_rank = min(m, n)
     I = generateI(max_rank)
-    U = [[row[column] / row[i] for column in row] for i, row in enumerate(U)]
+    for i in range(max_rank):
+        I[i][i] = U[i][i]
+    U = [[row[column] / row[i] for column in range(len(row))] for i, row in enumerate(U)]
     return I, U
 
 
